@@ -1,0 +1,22 @@
+@echo off
+setlocal
+
+set ROOT_DIR=C:\Users\casta\OneDrive\Desktop\vscode\currency-monitor
+set BUILD_DIR=%ROOT_DIR%\.build
+
+cd /d "%BUILD_DIR%" || (
+    echo ERROR: Build folder not found.
+    pause
+    exit /b 1
+)
+
+if not exist hello.exe (
+    echo ERROR: build not found
+    pause
+    exit /b 1
+)
+
+echo Running...
+echo.
+
+pause
