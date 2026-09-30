@@ -1,7 +1,4 @@
-#include <iostream>
-
-//TTTTTEST
-int main() {
-    std::cout << "hello" << std::endl;
-    return 0;
-}
+#include <windows.h>
+#include <cstdio>
+#include <cstdlib>
+#include "data.h"
