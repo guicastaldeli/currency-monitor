@@ -31,3 +31,47 @@ void Display::Tray::remove() {
     Shell_NotifyIconW(NIM_DELETE, &mNid);
     mInstalled = false;
 }
+
+// Set Menu
+int Display::Tray::setMenu(HWND hwnd, LPARAM lParam) {
+    HMENU menu = CreatePopupMenu();
+    AppendMenuW(menu, MF_STRING, ID_TRAY_SHOW, L"Show Chart");
+    AppendMenuW(menu, MF_SEPARATOR, 0, nullptr);
+    AppendMenuW(menu, MF_STRING, ID_TRAY_EXIT, L"Exit");
+
+    POINT pt;
+    GetCursorPos(&pt);
+    SetForegroundWindow(hwnd);
+    TrackPopupMenu(menu, TPM_RIGHTBUTTON, pt.x, pt.y, 0, hwnd, nullptr);
+
+    DestroyMenu(menu);
+    return 0;
+}
+
+// Display Menu
+int Display::Tray::displayMenu(HWND hwnd, WPARAM wParam) {
+    switch(LOWORD(wParam)) {
+        case ID_TRAY_EXIT:
+            DestroyWindow(hwnd);
+            return 0;
+        case ID_TRAY_SHOW:
+            if(id) StormTrack::Show(id);
+            return 0;
+    }
+
+    return 0;
+}
+
+// Remove Menu
+int Display::Tray::removeMenu() {
+    tray.remove();
+}
+
+/**
+ * 
+ * Chart
+ * 
+ */
+void Display::Chart::showChart() {
+    if(chartId >= 0) StormTrack::Show(chartId);
+}

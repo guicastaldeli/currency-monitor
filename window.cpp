@@ -9,6 +9,10 @@ LRESULT CALLBACK Window::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
                 std::free(data);
             }
             
-        return 0;     
+        return 0;
+        
+        case WM_TRAYICON: {
+
+        }
     }
 }
