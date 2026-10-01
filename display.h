@@ -2,6 +2,7 @@
 
 #include <window.h>
 #include <string>
+#include <map>
 #include "StormTrack.hpp"
 
 class Display {
@@ -15,12 +16,18 @@ class Display {
             public:
                 int chartId = -1;
 
-                const wchar_t* CHART_TITLE = L"chart"; 
+                std::string CHART_TITLE = "chart"; 
                 int CHART_WIDTH = 200;
                 int CHART_HEIGHT = 200;
 
-                float minX = 0.0;
-                float maxX = 60.0f;
+                float step = 1.0;
+                float offset = 0.0;
+
+                inline static const std::map<std::string, int> colors = {
+                    { "r", 0 },
+                    { "g", 200 },
+                    { "b", 100 }
+                };
 
                 void showChart();
                 void createChart();
@@ -36,8 +43,6 @@ class Display {
                 #define WM_TRAYICON (WM_APP + 100)
                 #define ID_TRAY_SHOW 9001
                 #define ID_TRAY_EXIT 9002
-
-                static Tray tray;
                 
                 bool install(HWND hwnd, HINSTANCE hInst, const wchar_t* tooltip);
                 void remove();
@@ -53,4 +58,21 @@ class Display {
 
                 int uid = 1;
         };
+
+        /**
+         * 
+         * Instances
+         * 
+         */
+        struct Instances {
+            Chart* chart;
+            Tray* tray;
+        };
+        
+        void set(HWND hwnd, LPARAM lParam);
+        int display(HWND hwnd, WPARAM wParam);
+        void remove();
+    
+    private:
+        static Instances& instances;
 };

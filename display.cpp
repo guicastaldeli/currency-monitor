@@ -1,5 +1,20 @@
 #include <display.h>
 
+// Set
+void Display::set(HWND hwnd, LPARAM lParam) {
+    instances.tray->setMenu(hwnd, lParam);
+}
+
+// Display
+int Display::display(HWND hwnd, WPARAM wParam) {
+    instances.tray->displayMenu(hwnd, wParam);
+}
+
+// Remove
+void Display::remove() {
+    instances.tray->removeMenu();
+}
+
 /**
  * 
  * Tray
@@ -55,7 +70,7 @@ int Display::Tray::displayMenu(HWND hwnd, WPARAM wParam) {
             DestroyWindow(hwnd);
             return 0;
         case ID_TRAY_SHOW:
-            if(id) StormTrack::Show(id);
+            instances.chart->showChart();
             return 0;
     }
 
@@ -64,7 +79,7 @@ int Display::Tray::displayMenu(HWND hwnd, WPARAM wParam) {
 
 // Remove Menu
 int Display::Tray::removeMenu() {
-    tray.remove();
+    instances.tray->remove();
 }
 
 /**
@@ -72,6 +87,16 @@ int Display::Tray::removeMenu() {
  * Chart
  * 
  */
+// Show Chart
 void Display::Chart::showChart() {
-    if(chartId >= 0) StormTrack::Show(chartId);
+    StormTrack::Show();
+}
+
+// Create Chart
+void Display::Chart::createChart() {
+    if(chartId >= 0) return;
+    
+    for(const auto& [_, v] : colors) {
+        StormTrack::AddTrace(CHART_TITLE, RGB(v, v, v), step, offset);
+    }
 }
