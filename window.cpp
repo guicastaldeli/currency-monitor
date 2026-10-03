@@ -1,5 +1,16 @@
 #include <window.h>
 
+Window::Window() :
+    stormTrack(WINDOW_TITLE) {}
+
+ Window::~Window() {}
+
+// Get Hwnd
+HWND Window::getHwnd() const {
+    HWND val = mHwnd;
+    return val;
+}
+
 // Wnd Proc
 LRESULT CALLBACK Window::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     switch(msg) {

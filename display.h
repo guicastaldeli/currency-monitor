@@ -4,6 +4,7 @@
 #include <string>
 #include <map>
 #include "StormTrack.hpp"
+#include <hello.h>
 
 class Display {
     public:
@@ -14,9 +15,13 @@ class Display {
          */
         struct Chart {
             public:
+                explicit Chart(Display* d) : display(d) {}
+                
+                Display* display;
+                
                 int chartId = -1;
 
-                std::string CHART_TITLE = "chart"; 
+                std::wstring CHART_TITLE = L"chart"; 
                 int CHART_WIDTH = 200;
                 int CHART_HEIGHT = 200;
 
@@ -44,12 +49,17 @@ class Display {
                 #define ID_TRAY_SHOW 9001
                 #define ID_TRAY_EXIT 9002
                 
-                bool install(HWND hwnd, HINSTANCE hInst, const wchar_t* tooltip);
+                explicit Tray(Display* d) : display(d) {}
+            
+                Display* display;
+
+                bool install(HINSTANCE hInst, const wchar_t* tooltip);
                 void remove();
                 
-                int setMenu(HWND hwnd, LPARAM lParam);
-                int displayMenu(HWND hwnd, WPARAM);
-                int removeMenu();
+                int setMenu(LPARAM lParam);
+                int displayMenu(WPARAM);
+                void removeMenu();
+
             private:
                 Chart* chart = nullptr;
 
@@ -65,14 +75,24 @@ class Display {
          * 
          */
         struct Instances {
-            Chart* chart;
-            Tray* tray;
+            Chart chart;
+            Tray tray;
+
+            explicit Instances(Display* d) : 
+                chart(d),
+                tray(d) {}
         };
         
-        void set(HWND hwnd, LPARAM lParam);
-        int display(HWND hwnd, WPARAM wParam);
+        Display(Hello* hello, Window* window);
+        ~Display();
+        
+        Instances instances;
+
+        void set(LPARAM lParam);
+        int display(WPARAM wParam);
         void remove();
     
     private:
-        static Instances& instances;
+        Hello* hello = nullptr;
+        Window* window = nullptr;
 };

@@ -1,18 +1,25 @@
 #include <display.h>
 
+Display::Display(Hello* hello, Window* window) : 
+    hello(hello),
+    window(window),
+    instances(this) {}
+
+Display::~Display() {}
+
 // Set
-void Display::set(HWND hwnd, LPARAM lParam) {
-    instances.tray->setMenu(hwnd, lParam);
+void Display::set(LPARAM lParam) {
+    instances.tray.setMenu(lParam);
 }
 
 // Display
-int Display::display(HWND hwnd, WPARAM wParam) {
-    instances.tray->displayMenu(hwnd, wParam);
+int Display::display(WPARAM wParam) {
+    instances.tray.displayMenu(wParam);
 }
 
 // Remove
 void Display::remove() {
-    instances.tray->removeMenu();
+    instances.tray.removeMenu();
 }
 
 /**
@@ -21,14 +28,14 @@ void Display::remove() {
  * 
  */
 // Install
-bool Display::Tray::install(HWND hwnd, HINSTANCE hInst, const wchar_t* tooltip) {
+bool Display::Tray::install(HINSTANCE hInst, const wchar_t* tooltip) {
     if(mInstalled) return true;
     
     HICON icon = LoadIconW(hInst, L"IDI_APPICON");
     if(icon == nullptr) icon = LoadIconW(nullptr, IDI_APPLICATION);
 
     mNid.cbSize = sizeof(mNid);
-    mNid.hWnd = hwnd;
+    mNid.hWnd = display->window->getHwnd();
     mNid.uID = uid;
     mNid.uFlags = NIF_MESSAGE | NIF_ICON | NIF_TIP;
     mNid.uCallbackMessage = WM_TRAYICON;
@@ -48,7 +55,9 @@ void Display::Tray::remove() {
 }
 
 // Set Menu
-int Display::Tray::setMenu(HWND hwnd, LPARAM lParam) {
+int Display::Tray::setMenu(LPARAM lParam) {
+    HWND hwnd = display->window->getHwnd();
+
     HMENU menu = CreatePopupMenu();
     AppendMenuW(menu, MF_STRING, ID_TRAY_SHOW, L"Show Chart");
     AppendMenuW(menu, MF_SEPARATOR, 0, nullptr);
@@ -64,13 +73,15 @@ int Display::Tray::setMenu(HWND hwnd, LPARAM lParam) {
 }
 
 // Display Menu
-int Display::Tray::displayMenu(HWND hwnd, WPARAM wParam) {
+int Display::Tray::displayMenu(WPARAM wParam) {
+    HWND hwnd = display->window->getHwnd();
+
     switch(LOWORD(wParam)) {
         case ID_TRAY_EXIT:
             DestroyWindow(hwnd);
             return 0;
         case ID_TRAY_SHOW:
-            instances.chart->showChart();
+            display->instances.chart.showChart();
             return 0;
     }
 
@@ -78,8 +89,8 @@ int Display::Tray::displayMenu(HWND hwnd, WPARAM wParam) {
 }
 
 // Remove Menu
-int Display::Tray::removeMenu() {
-    instances.tray->remove();
+void Display::Tray::removeMenu() {
+    display->instances.tray.remove();
 }
 
 /**
@@ -89,7 +100,7 @@ int Display::Tray::removeMenu() {
  */
 // Show Chart
 void Display::Chart::showChart() {
-    StormTrack::Show();
+    display->hello->stormTrack.Show();
 }
 
 // Create Chart
@@ -97,6 +108,6 @@ void Display::Chart::createChart() {
     if(chartId >= 0) return;
     
     for(const auto& [_, v] : colors) {
-        StormTrack::AddTrace(CHART_TITLE, RGB(v, v, v), step, offset);
+        display->hello->stormTrack.AddTrace(CHART_TITLE, RGB(v, v, v), step, offset);
     }
 }
