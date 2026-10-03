@@ -3,7 +3,6 @@
 #include <windows.h>
 #include <cstdio>
 #include <cstdlib>
-#include "data.h"
 #include "display.h"
 #include "message.h"
 

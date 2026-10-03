@@ -1,7 +1,5 @@
 #include <window.h>
 
-#include "data.h"
-
 Window::Window() {}
 Window::~Window() {}
 

@@ -2,7 +2,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include "hello.h"
-#include "data.h"
+#include "data/.out/data.h"
 
 Hello::Hello() :
     window(),

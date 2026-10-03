@@ -8,7 +8,6 @@ set ROOT_DIR=C:\Users\casta\OneDrive\Desktop\vscode\currency-monitor
 set BUILD_DIR=%ROOT_DIR%\.build
 set OUT_EXE=%BUILD_DIR%\hello.exe
 
-:: --- Extra paths for headers and libs ---
 set STORM_INC=%ROOT_DIR%\.lib\StormTrack\StormTrackHeaders
 set STORM_LIB=%ROOT_DIR%\.lib\StormTrack\Release\StormTrack.lib
 set DATA_LIB=%ROOT_DIR%\.lib\data.lib
