@@ -1,11 +1,25 @@
 #include <message.h>
 
-Message::Message(Hello* hello, Display* display) :
+Message* Message::sInstance = nullptr;
+
+Message::Message(Hello* hello, Window* window, Display* display) :
     hello(hello),
+    window(window),
     display(display)
 {}
-
 Message::~Message() {}
+void Message::install(Message* instance) {
+    sInstance = instance;
+}
+Message* Message::instance() {
+    return sInstance;
+}
+
+// Get Window
+Window* Message::getWindow() const {
+    Window* val = window;
+    return val;
+}
 
 // Handle Rate Message
 void Message::handleRateMessage(const char* data) {
@@ -17,12 +31,12 @@ void Message::handleRateMessage(const char* data) {
     double rate = atof(pos);
     if(rate <= 0.0) return;
 
-    Display::Chart c = display->instances.chart;
+    Display::Chart& c = display->instances.chart;
     if(c.chartId >= 0) {
         hello->stormTrack.RealtimeView(rate, c.chartId);
     }
 
-    printf("[rate] %.4%\n", rate);
+    printf("[rate] %.4f\n", rate);
     fflush(stdout);
 }
 
@@ -46,9 +60,11 @@ void Message::handleDataMessage(const char* data) {
 // On Data Message
 extern "C" void __stdcall onDataMessage(const char* data) {
     if(data == nullptr) return;
+    if(!message || !message->getWindow()) return;   
 
-    HWND hwnd = message->window->getHwnd();
-
+    HWND hwnd = message->getWindow()->getHwnd();
+    if(hwnd == nullptr) return;
+    
     size_t len = strlen(data);
     char* copy = static_cast<char*>(malloc(len + 1));
     if(!copy) return;
@@ -58,11 +74,3 @@ extern "C" void __stdcall onDataMessage(const char* data) {
         free(copy);
     }
 }
-
-// Set Data Sink
-extern "C" void __stdcall setDataSink(HWND data) {
-    HWND hwnd = message->window->getHwnd();
-    hwnd = data;
-}
-
-//

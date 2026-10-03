@@ -31,7 +31,8 @@ void Display::remove() {
 bool Display::Tray::install(HINSTANCE hInst, const wchar_t* tooltip) {
     if(mInstalled) return true;
     
-    HICON icon = LoadIconW(hInst, L"IDI_APPICON");
+    const wchar_t* appIcon = L"IDI_APPICON";
+    HICON icon = LoadIconW(hInst, appIcon);
     if(icon == nullptr) icon = LoadIconW(nullptr, IDI_APPLICATION);
 
     mNid.cbSize = sizeof(mNid);
