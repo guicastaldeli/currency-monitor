@@ -6,7 +6,7 @@
 
 Hello::Hello() :
     window(),
-    message(),
     display(this, &window),
+    message(this, &window, &display),
     stormTrack(window.WINDOW_TITLE)
 {}

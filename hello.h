@@ -11,8 +11,8 @@ class Hello {
         ~Hello();
 
         Window window;
-        Message message;
         Display display;
+        Message message;
 
         StormTrack stormTrack;
 };

@@ -8,19 +8,20 @@
 
 class Message {
     public:
-        Message();
+        Message(Hello* hello, Window* window, Display* display);
         ~Message();
+
+        void handleRateMessage(const char* data);
+        void handleDataMessage(const char* data);
         
-        static HWND hwnd;
-
-        static void handleRateMessage(const char* data);
-        static void handleDataMessage(const char* data);
-
-    private:
-        const HWND g_sink = nullptr;
+        Hello* hello = nullptr;
+        Window* window = nullptr;
+        Display* display = nullptr;
 };
 
 extern "C" {
+    static Message* message;
+
     void __stdcall onDataMessage(const char* data);
     void __stdcall setDataSink(HWND hwnd);
     void __stdcall dataMessageSink(const char* data);

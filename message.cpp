@@ -1,8 +1,9 @@
 #include <message.h>
 
-Message::Message() {
-    hwnd = nullptr;
-}
+Message::Message(Hello* hello, Display* display) :
+    hello(hello),
+    display(display)
+{}
 
 Message::~Message() {}
 
@@ -16,9 +17,9 @@ void Message::handleRateMessage(const char* data) {
     double rate = atof(pos);
     if(rate <= 0.0) return;
 
-    Display::Chart* c = Display::Instances::chart;
-    if(c != nullptr && c->chartId >= 0) {
-        StormTrack::RealtimeView(rate, c->chartId);
+    Display::Chart c = display->instances.chart;
+    if(c.chartId >= 0) {
+        hello->stormTrack.RealtimeView(rate, c.chartId);
     }
 
     printf("[rate] %.4%\n", rate);
@@ -46,19 +47,22 @@ void Message::handleDataMessage(const char* data) {
 extern "C" void __stdcall onDataMessage(const char* data) {
     if(data == nullptr) return;
 
+    HWND hwnd = message->window->getHwnd();
+
     size_t len = strlen(data);
     char* copy = static_cast<char*>(malloc(len + 1));
     if(!copy) return;
     memcpy(copy, data, len + 1);
 
-    if(!PostMessage(Message::hwnd, WM_APP_RATE_UPDATE, 0, reinterpret_cast<LPARAM>(copy))) {
+    if(!PostMessage(hwnd, WM_APP_RATE_UPDATE, 0, reinterpret_cast<LPARAM>(copy))) {
         free(copy);
     }
 }
 
 // Set Data Sink
-extern "C" void __stdcall setDataSink(HWND hwnd) {
-    Message::hwnd = hwnd;
+extern "C" void __stdcall setDataSink(HWND data) {
+    HWND hwnd = message->window->getHwnd();
+    hwnd = data;
 }
 
 //
