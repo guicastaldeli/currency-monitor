@@ -16,7 +16,8 @@ void Display::set(LPARAM lParam) {
 
 // Display
 int Display::display(WPARAM wParam) {
-    instances.tray.displayMenu(wParam);
+    int val = instances.tray.displayMenu(wParam);
+    return val;
 }
 
 // Remove

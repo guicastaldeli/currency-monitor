@@ -16,10 +16,6 @@ class Message {
         ~Message();
         static Message* instance();
 
-        Hello* hello = nullptr;
-        Window* window = nullptr;
-        Display* display = nullptr;
-
         static void install(Message* instance);
 
         Window* getWindow() const;

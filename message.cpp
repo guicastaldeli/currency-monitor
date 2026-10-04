@@ -2,7 +2,7 @@
 #include "hello.h"
 #include "display.h"
 #include "window.h"
-#include "data.h"
+#include "data/.out/data.h"
 
 Message* Message::sInstance = nullptr;
 

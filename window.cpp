@@ -3,7 +3,7 @@
 #include "window.h"
 #include "display.h"
 #include "message.h"
-#include "data.h"
+#include "data/.out/data.h"
 
 Window::Window() {}
 Window::~Window() {}

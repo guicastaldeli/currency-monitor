@@ -38,7 +38,9 @@ void Hello::set(HINSTANCE hInstance) {
 // Run
 int Hello::Run(HINSTANCE hInstance) {
     gHello.set(hInstance);
-    gHello.message.set();
+    
+    int val = gHello.message.set();
+    return val;
 }
 
 // wWinMain
