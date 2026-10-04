@@ -9,7 +9,6 @@
 class Hello;
 class Window;
 class Display;
-extern Message* gMessage;
 class Message {
     public:
         Message(Hello* hello, Window* window, Display* display);
@@ -37,8 +36,6 @@ class Message {
 };
 
 extern "C" {
-    Message* message = Message::instance();
-
     void __stdcall onDataMessage(const char* data);
     //void __stdcall setDataSink(HWND hwnd);
     //void __stdcall dataMessageSink(const char* data);

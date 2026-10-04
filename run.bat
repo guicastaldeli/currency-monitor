@@ -11,12 +11,13 @@ cd /d "%BUILD_DIR%" || (
 )
 
 if not exist hello.exe (
-    echo ERROR: build not found
+    echo ERROR: hello.exe not found. Run build.bat first.
     pause
     exit /b 1
 )
 
 echo Running...
+hello.exe
 echo.
-
+echo Exited with code %errorlevel%.
 pause

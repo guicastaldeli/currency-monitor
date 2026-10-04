@@ -98,12 +98,16 @@ LRESULT CALLBACK Window::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
             if(LOWORD(lParam) == WM_RBUTTONUP && w && w->getDisplay()) {
                 w->getDisplay()->set(lParam);
             }
+
+            return 0;
         }
         case WM_COMMAND: {
             if(w && w->getDisplay()) {
                 int val = w->getDisplay()->display(wParam);
                 return val;
             }
+
+            return 0;
         }
         case WM_DESTROY: {
             if(w && w->getDisplay()) w->getDisplay()->remove();
@@ -111,8 +115,7 @@ LRESULT CALLBACK Window::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
             PostQuitMessage(0);
             return 0;
         }
-
-        LRESULT CALLBACK val = DefWindowProcW(hwnd, msg, wParam, lParam);
-        return val;
     }
+
+    return DefWindowProcW(hwnd, msg, wParam, lParam);
 }

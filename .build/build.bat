@@ -11,8 +11,8 @@ set OUT_EXE=%BUILD_DIR%\hello.exe
 set STORM_INC=%ROOT_DIR%\.lib\StormTrack\StormTrackHeaders
 set STORM_LIB=%ROOT_DIR%\.lib\StormTrack\Release\StormTrack.lib
 set DATA_LIB=%ROOT_DIR%\.lib\data.lib
-set DATA_DLL=%ROOT_DIR%\.out\data.dll
-set OUT_HDR=%ROOT_DIR%\.out
+set DATA_DLL=%ROOT_DIR%\data\.out\data.dll
+set OUT_HDR=%ROOT_DIR%\data\.out
 
 cd /d "%ROOT_DIR%" || (
     echo ERROR: Could not cd into %ROOT_DIR%
@@ -116,6 +116,11 @@ if %errorlevel% neq 0 (
 echo.
 echo Copying runtime DLL...
 copy /Y "%DATA_DLL%" "%BUILD_DIR%\" >nul
+if not exist "%BUILD_DIR%\data.dll" (
+    echo ERROR: Failed to copy data.dll from %DATA_DLL%
+    pause
+    exit /b 1
+)
 
 echo.
 echo Final verification...

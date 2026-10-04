@@ -72,6 +72,8 @@ void Message::handleDataMessage(const char* data) {
 // On Data Message
 extern "C" void __stdcall onDataMessage(const char* data) {
     if(data == nullptr) return;
+
+    Message* message = Message::instance();
     if(!message || !message->getWindow()) return;   
 
     HWND hwnd = message->getWindow()->getHwnd();
