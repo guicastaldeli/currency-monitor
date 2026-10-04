@@ -1,0 +1,10 @@
+LIBRARY data
+EXPORTS
+    RegisterCallback
+    RequestCurrencies
+    AddPair
+    RemovePair
+    ClearPairs
+    SetIntervalSeconds
+    StartMonitor
+    StopMonitor
