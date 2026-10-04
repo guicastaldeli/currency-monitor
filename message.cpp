@@ -1,4 +1,8 @@
-#include <message.h>
+#include "message.h"
+#include "hello.h"
+#include "display.h"
+#include "window.h"
+#include "data.h"
 
 Message* Message::sInstance = nullptr;
 
@@ -21,7 +25,11 @@ Window* Message::getWindow() const {
     return val;
 }
 
-// Handle Rate Message
+/**
+ * 
+ * Handle Rate Message
+ * 
+ */
 void Message::handleRateMessage(const char* data) {
     const char* key = "\"rate\":";
     const char* pos = strstr(data, key);
@@ -40,7 +48,11 @@ void Message::handleRateMessage(const char* data) {
     fflush(stdout);
 }
 
-// Handle Data Message
+/**
+ * 
+ * Handle Data Message
+ * 
+ */
 void Message::handleDataMessage(const char* data) {
     if(strstr(data, "\"type\":\"rate\"")) {
         handleRateMessage(data);
@@ -73,4 +85,41 @@ extern "C" void __stdcall onDataMessage(const char* data) {
     if(!PostMessage(hwnd, WM_APP_RATE_UPDATE, 0, reinterpret_cast<LPARAM>(copy))) {
         free(copy);
     }
+}
+
+/**
+ * 
+ * Set
+ * 
+ */
+int Message::set() {
+    MSG msg;
+    while(GetMessageW(&msg, nullptr, 0, 0) > 0) {
+        TranslateMessage(&msg);
+        DispatchMessageW(&msg);
+    }
+
+    return 0;
+}
+
+/**
+ * 
+ * Start
+ * 
+ */
+void Message::start() {
+    RequestCurrencies();
+    AddPair(const_cast<char*>("USD"), const_cast<char*>("BRL"));
+    SetIntervalSeconds(10);
+    StartMonitor();
+}
+
+/**
+ * 
+ * Run
+ * 
+ */
+void Message::run() {
+    RegisterCallback(&onDataMessage);
+    start();
 }

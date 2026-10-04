@@ -1,4 +1,9 @@
-#include <window.h>
+#include <cstdio>
+#include <cstdlib>
+#include "window.h"
+#include "display.h"
+#include "message.h"
+#include "data.h"
 
 Window::Window() {}
 Window::~Window() {}
@@ -38,11 +43,19 @@ Message* Window::getMessage() const {
 
 /**
  * 
- * Create Window
+ * Run
  * 
  */
-void Window::createWindow(HINSTANCE hInstance) {
-    HWND hwnd = CreateWindowExW(
+void Window::run(HINSTANCE hInstance) {
+    WNDCLASSEX wc = {};
+    wc.cbSize = sizeof(wc);
+    wc.lpfnWndProc = WndProc;
+    wc.hInstance = hInstance;
+    wc.lpszClassName = WINDOW_CLASS;
+    wc.hIcon = LoadIconW(nullptr, IDI_APPLICATION);
+    RegisterClassExW(&wc);
+
+    mHwnd = CreateWindowExW(
         0, WINDOW_CLASS, WINDOW_TITLE,
         WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT, CW_USEDEFAULT,
@@ -50,11 +63,11 @@ void Window::createWindow(HINSTANCE hInstance) {
         nullptr, nullptr,
         hInstance, this
     );
-    if(hwnd == nullptr) {
+    if(mHwnd == nullptr) {
         printf("CreateWindow failed!.");
     }
 
-    setHwnd(hwnd);
+    setHwnd(mHwnd);
 }
 
 /**
@@ -102,41 +115,4 @@ LRESULT CALLBACK Window::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
         LRESULT CALLBACK val = DefWindowProcW(hwnd, msg, wParam, lParam);
         return val;
     }
-}
-
-/**
- * 
- * wWinMain
- * 
- */
-int WINAPI Window::wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR, int) {
-    WNDCLASSEX w = {};
-    w.cbSize = sizeof(w);
-    w.lpfnWndProc = WndProc;
-    w.hInstance = hInstance;
-    w.lpszClassName = WINDOW_CLASS;
-    w.hIcon = LoadIconW(nullptr, IDI_APPLICATION);
-    RegisterClassExW(&w);
-
-    // Window
-    createWindow(hInstance);
-
-    // Tray + chart
-    getDisplay()->instances.tray.install(hInstance, WINDOW_TITLE);
-    getDisplay()->instances.chart.createChart();
-    
-    RegisterCallback(&onDataMessage);
-
-    RequestCurrencies();
-    AddPair(const_cast<char*>("USD"), const_cast<char*>("BRL"));
-    SetIntervalSeconds(10);
-    StartMonitor();
-
-    MSG msg;
-    while(GetMessageW(&msg, nullptr, 0, 0) > 0) {
-        TranslateMessage(&msg);
-        DispatchMessage(&msg);
-    }
-
-    return 0;
 }

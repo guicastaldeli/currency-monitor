@@ -1,11 +1,9 @@
 #pragma once
 
 #include <windows.h>
-#include <cstdio>
-#include <cstdlib>
-#include "display.h"
-#include "message.h"
 
+class Display;
+class Message;
 class Window {
     public:
         Window();
@@ -15,6 +13,8 @@ class Window {
         const wchar_t* WINDOW_CLASS = L"Window";
         const int WINDOW_WIDTH = 200;
         const int WINDOW_HEIGHT = 400;
+
+        void run(HINSTANCE hInstance);
 
         static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
         
@@ -31,8 +31,4 @@ class Window {
         HWND mHwnd = nullptr;
         Display* mDisplay = nullptr;
         Message* mMessage = nullptr;
-
-        void createWindow(HINSTANCE hInstance);
-
-        int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR, int); 
 };

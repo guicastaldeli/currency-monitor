@@ -15,4 +15,7 @@ class Hello {
         Message message;
 
         StormTrack stormTrack;
+
+        void set(HINSTANCE hInstance);
+        static int Run(HINSTANCE hInstance);
 };

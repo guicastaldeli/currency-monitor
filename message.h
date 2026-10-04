@@ -6,6 +6,9 @@
 
 #define WM_APP_RATE_UPDATE (WM_APP + 1)
 
+class Hello;
+class Window;
+class Display;
 extern Message* gMessage;
 class Message {
     public:
@@ -24,8 +27,17 @@ class Message {
         void handleRateMessage(const char* data);
         void handleDataMessage(const char* data);
 
+        int set();
+        void run();
+
     private:
+        Hello* hello = nullptr;
+        Window* window = nullptr;
+        Display* display = nullptr;
+
         static Message* sInstance;
+
+        void start();
 };
 
 extern "C" {

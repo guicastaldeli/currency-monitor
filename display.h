@@ -4,8 +4,9 @@
 #include <string>
 #include <map>
 #include "StormTrack.hpp"
-#include <hello.h>
 
+class Hello;
+class Window;
 class Display {
     public:
         /**
@@ -90,6 +91,8 @@ class Display {
 
         void set(LPARAM lParam);
         int display(WPARAM wParam);
+
+        void run(HINSTANCE hInstance);
         void remove();
     
     private:

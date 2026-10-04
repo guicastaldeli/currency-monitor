@@ -1,4 +1,6 @@
 #include <display.h>
+#include "hello.h"
+#include "window.h"
 
 Display::Display(Hello* hello, Window* window) : 
     hello(hello),
@@ -91,7 +93,7 @@ int Display::Tray::displayMenu(WPARAM wParam) {
 
 // Remove Menu
 void Display::Tray::removeMenu() {
-    display->instances.tray.remove();
+    remove();
 }
 
 /**
@@ -111,4 +113,14 @@ void Display::Chart::createChart() {
     for(const auto& [_, v] : colors) {
         display->hello->stormTrack.AddTrace(CHART_TITLE, RGB(v, v, v), step, offset);
     }
+}
+
+/**
+ * 
+ * Run
+ * 
+ */
+void Display::run(HINSTANCE hInstance) {
+    instances.tray.install(hInstance, window->WINDOW_TITLE);
+    instances.chart.createChart();
 }
