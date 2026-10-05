@@ -29,11 +29,7 @@ class Display {
                 float step = 1.0;
                 float offset = 0.0;
 
-                inline static const std::map<std::string, int> colors = {
-                    { "r", 0 },
-                    { "g", 200 },
-                    { "b", 100 }
-                };
+                inline static const COLORREF Color = RGB(0, 100, 200);
 
                 void showChart();
                 void createChart();

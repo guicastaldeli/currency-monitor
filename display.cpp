@@ -110,14 +110,7 @@ void Display::Chart::showChart() {
 // Create Chart
 void Display::Chart::createChart() {
     if(chartId >= 0) return;
-
-    chartId = static_cast<int>(
-        display->hello->stormTrack.AddTrace(
-            CHART_TITLE, RGB(0, 200, 100), step, offset));
-    
-    /*for(const auto& [_, v] : colors) {
-        display->hello->stormTrack.AddTrace(CHART_TITLE, RGB(v, v, v), step, offset);
-    }*/
+    chartId = static_cast<int>(display->hello->stormTrack.AddTrace(CHART_TITLE, Color, step, offset));
 }
 
 /**

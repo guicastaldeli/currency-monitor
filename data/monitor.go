@@ -17,7 +17,7 @@ func setIntervalSeconds(sec int) {
 	mu.Lock()
 	defer mu.Unlock()
 
-	const secs = 1
+	const secs = 5
 	if sec < secs {
 		sec = secs
 	}
